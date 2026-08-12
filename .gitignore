@@ -1,0 +1,16 @@
+# Sorties régénérées à chaque exécution de prospect_finder.py — pas la peine
+# de les versionner, elles reviennent avec `python prospect_finder.py`.
+prospects.csv
+prospects.html
+prospects.pdf
+demos/
+
+# Export intermédiaire du bouton "Exporter le journal" de prospects.html,
+# et le classeur qu'il alimente : générés/mis à jour par le script, pas du
+# code source.
+journal_envois.csv
+Journal des envois - Vision Amah.xlsx
+
+# Cache Python
+__pycache__/
+*.pyc
