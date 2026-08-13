@@ -110,6 +110,20 @@ FAMILLES = {
                 "fitness_centre", "sports_centre", "water_park"},
 }
 
+BESOIN = {
+    "restauration": "automatisation",
+    "beaute":       "automatisation",
+    "sante":        "automatisation",
+    "hebergement":  "automatisation",
+    "auto":         "automatisation",
+    "services":     "automatisation",
+    "mode":         "site",
+    "alimentation": "site",
+    "informatique": "site",
+    "loisirs":      "site",
+    "generique":    "site",
+}
+
 LABELS_GROUPE = {
     "restauration": "🍽️ Restauration",
     "beaute": "💇 Beauté",
@@ -123,8 +137,9 @@ LABELS_GROUPE = {
     "loisirs": "🎉 Loisirs",
     "generique": "🏪 Autres services",
 }
-ORDRE_GROUPES = ["restauration", "beaute", "mode", "alimentation", "informatique",
-                  "sante", "hebergement", "auto", "services", "loisirs", "generique"]
+ORDRE_AUTO    = ["restauration", "beaute", "sante", "hebergement", "auto", "services"]
+ORDRE_SITE    = ["mode", "alimentation", "informatique", "loisirs", "generique"]
+ORDRE_GROUPES = ORDRE_AUTO + ORDRE_SITE
 
 
 def famille(valeur_osm):
@@ -144,19 +159,21 @@ def famille(valeur_osm):
 MESSAGES = {
     "restauration": (
         "Bonjour {nom} 👋\n\n"
-        "Vos clients ne peuvent pas consulter votre menu avant de venir, ni "
-        "commander à l'avance. Je vous ai préparé un aperçu (en pièce jointe) : "
-        "votre menu avec vos plats et vos prix, une galerie photo, et un bouton "
-        "de commande directe sur WhatsApp.\n\n"
+        "Vos commandes arrivent encore par téléphone, une par une. Je vous ai "
+        "préparé un aperçu (en pièce jointe) : votre menu en ligne avec commande "
+        "directe par WhatsApp, confirmation automatique envoyée au client, et "
+        "suivi de commande sans appel. Vos clients commandent sans vous déranger, "
+        "vous gagnez du temps sur chaque service.\n\n"
         "Mes réalisations : {site}\n\n"
         "Si ça vous intéresse, je vous explique en deux minutes.\n\n{signature}"
     ),
     "beaute": (
         "Bonjour {nom} 👋\n\n"
-        "Vos clientes vous trouvent difficilement en ligne, et chaque prise de "
-        "rendez-vous vous prend un appel. Je vous ai préparé un aperçu (en pièce "
-        "jointe) : vos prestations avec leurs tarifs, une galerie photo, et un "
-        "bouton de réservation direct sur WhatsApp.\n\n"
+        "Chaque prise de rendez-vous vous prend un appel et une saisie manuelle. "
+        "Je vous ai préparé un aperçu (en pièce jointe) : vos prestations en "
+        "ligne, réservation directe par WhatsApp, et rappel automatique envoyé "
+        "à votre cliente la veille. Moins d'absences, moins de téléphone, plus "
+        "de temps pour travailler.\n\n"
         "Mes réalisations : {site}\n\n"
         "Si ça vous intéresse, je vous explique en deux minutes.\n\n{signature}"
     ),
@@ -186,35 +203,41 @@ MESSAGES = {
     ),
     "sante": (
         "Bonjour {nom} 👋\n\n"
-        "Vos patients ne trouvent ni vos horaires ni vos coordonnées en ligne "
-        "avant de se déplacer. Je vous ai préparé un aperçu (en pièce jointe) : "
-        "vos services, votre localisation, et une prise de contact directe.\n\n"
+        "Vos patients appellent pour savoir si vous êtes disponibles, et oublient "
+        "souvent leur rendez-vous. Je vous ai préparé un aperçu (en pièce jointe) "
+        ": prise de rendez-vous en ligne et rappel automatique envoyé la veille "
+        "par WhatsApp. Moins d'absences, moins d'appels à gérer, plus de "
+        "consultations honorées.\n\n"
         "Mes réalisations : {site}\n\n"
         "Si ça vous intéresse, je vous explique en deux minutes.\n\n{signature}"
     ),
     "hebergement": (
         "Bonjour {nom} 👋\n\n"
-        "Vos clients ne peuvent pas voir vos chambres ni réserver en ligne avant "
-        "d'arriver. Je vous ai préparé un aperçu (en pièce jointe) : vos chambres "
-        "avec leurs tarifs, une galerie photo, et une réservation directe par "
-        "WhatsApp.\n\n"
+        "Vos réservations passent encore par appel téléphonique, sans confirmation "
+        "automatique. Je vous ai préparé un aperçu (en pièce jointe) : réservation "
+        "en ligne, confirmation instantanée par WhatsApp, et rappel automatique "
+        "la veille de l'arrivée. Moins de no-shows, moins d'appels, plus de "
+        "chambres remplies.\n\n"
         "Mes réalisations : {site}\n\n"
         "Si ça vous intéresse, je vous explique en deux minutes.\n\n{signature}"
     ),
     "auto": (
         "Bonjour {nom} 👋\n\n"
-        "Vos clients ne trouvent pas vos prestations ni vos tarifs en ligne avant "
-        "de passer. Je vous ai préparé un aperçu (en pièce jointe) : vos "
-        "prestations avec leurs tarifs, et une prise de rendez-vous directe par "
-        "WhatsApp.\n\n"
+        "Vos clients rappellent pour savoir si leur véhicule est prêt, et les "
+        "rendez-vous se perdent dans des appels en double. Je vous ai préparé un "
+        "aperçu (en pièce jointe) : prise de rendez-vous en ligne, confirmation "
+        "automatique, et message WhatsApp envoyé quand le véhicule est prêt. "
+        "Moins d'appels, plus de clients fidèles.\n\n"
         "Mes réalisations : {site}\n\n"
         "Si ça vous intéresse, je vous explique en deux minutes.\n\n{signature}"
     ),
     "services": (
         "Bonjour {nom} 👋\n\n"
-        "Vos clients ne trouvent pas facilement vos services en ligne. Je vous "
-        "ai préparé un aperçu (en pièce jointe) : la présentation de votre "
-        "activité et une prise de contact directe.\n\n"
+        "Vos relances clients et vos suivis de dossiers se font encore à la main, "
+        "un par un. Je vous ai préparé un aperçu (en pièce jointe) : présentation "
+        "de vos services en ligne, formulaire de contact direct, et relances "
+        "automatiques par WhatsApp. Vous vous concentrez sur le travail, les "
+        "suivis se font tout seuls.\n\n"
         "Mes réalisations : {site}\n\n"
         "Si ça vous intéresse, je vous explique en deux minutes.\n\n{signature}"
     ),
@@ -509,6 +532,7 @@ def extraire(elements):
             "lon": lon,
             "type_osm": type_osm,
             "famille": famille(type_osm),
+            "besoin": BESOIN.get(famille(type_osm), "site"),
             "email": tags.get("email", ""),
             "reseau": tags.get("facebook") or tags.get("contact:facebook")
                       or tags.get("contact:instagram", ""),
@@ -709,7 +733,7 @@ def fusionner_journal_envois():
 
 def ecrire_csv(fiches, chemin=FICHIER_CSV):
     """Export de secours, pour classement ou sauvegarde hors-ligne."""
-    colonnes = ["zone", "nom", "categorie", "telephone", "lien_whatsapp",
+    colonnes = ["zone", "nom", "categorie", "besoin", "telephone", "lien_whatsapp",
                 "emplacement", "rue", "email", "reseau", "priorite",
                 "statut", "message", "demo"]
     f, chemin_reel = ouvrir_en_ecriture(chemin, newline="", encoding="utf-8-sig")
@@ -720,6 +744,7 @@ def ecrire_csv(fiches, chemin=FICHIER_CSV):
             principal = p["numeros"][0]
             w.writerow([
                 p["zone"], p["nom"], p["type_osm"],
+                p.get("besoin", "site"),
                 " / ".join("+" + n for n in p["numeros"]),
                 f"https://wa.me/{principal}",
                 f'https://www.google.com/maps?q={p["lat"]},{p["lon"]}',
@@ -796,6 +821,8 @@ GABARIT_HTML = """<!doctype html>
          border:1px solid var(--bord); border-radius:9px; padding:12px; }
   .msg.ouvert { display:block; }
   .vide { text-align:center; color:var(--doux); padding:40px 0; }
+  .badge-auto { background:#78350f22; color:#f59e0b; border:1px solid #f59e0b55; }
+  .badge-site { background:#1e3a5f22; color:#60a5fa; border:1px solid #3b82f655; }
 </style>
 </head>
 <body>
@@ -804,6 +831,11 @@ GABARIT_HTML = """<!doctype html>
   <div class="barre">
     <input id="q" placeholder="Rechercher un nom…">
     <select id="zone"><option value="">Toutes les zones</option>__ZONES__</select>
+    <select id="besoin">
+      <option value="">⚡ Site + Auto</option>
+      <option value="automatisation">⚡ Automatisation</option>
+      <option value="site">🌐 Site web</option>
+    </select>
     <select id="etat">
       <option value="restants">À contacter</option>
       <option value="tous">Tous</option>
@@ -825,6 +857,8 @@ GABARIT_HTML = """<!doctype html>
 const DONNEES = __DONNEES__;
 const LABELS = __LABELS__;
 const ORDRE = __ORDRE__;
+const ORDRE_AUTO = __ORDRE_AUTO__;
+const ORDRE_SITE = __ORDRE_SITE__;
 
 const JOUR_MS = 24 * 60 * 60 * 1000;
 const DELAI_RELANCE_JOURS = 5;
@@ -901,6 +935,7 @@ function construireFiche(p) {
         <div class="meta"></div>
       </div>
       <div class="etiquettes">
+        ${p.besoin === "automatisation" ? '<span class="etiq badge-auto">⚡ Auto</span>' : '<span class="etiq badge-site">🌐 Site</span>'}
         ${p.prio ? '<span class="etiq prio">prioritaire</span>' : ""}
         ${relance ? '<span class="etiq relance">à relancer</span>' : ""}
         ${etat !== "a_contacter" ? `<span class="etiq etat-${etat}"></span>` : ""}
@@ -944,10 +979,12 @@ function afficher() {
   const q = document.getElementById("q").value.trim().toLowerCase();
   const z = document.getElementById("zone").value;
   const e = document.getElementById("etat").value;
+  const b = document.getElementById("besoin").value;
 
   const vus = DONNEES.filter(p => {
     if (q && !p.nom.toLowerCase().includes(q)) return false;
     if (z && p.zone !== z) return false;
+    if (b && p.besoin !== b) return false;
     const etat = etatDe(p.id);
     if (e === "restants" && etat !== "a_contacter") return false;
     if (e === "prio" && !p.prio) return false;
@@ -967,25 +1004,37 @@ function afficher() {
     return;
   }
 
-  for (const groupe of ORDRE) {
-    const items = vus.filter(p => p.groupe === groupe);
-    if (!items.length) continue;
-
-    const section = document.createElement("div");
-    section.className = "section" + (repliees.has(groupe) ? " repliee" : "");
-    section.dataset.groupe = groupe;
-    section.innerHTML = `
-      <div class="entete">
-        <span class="titre">${LABELS[groupe]} <span class="sous">— ${items.length}</span></span>
-        <span class="fleche">▾</span>
-      </div>
-      <div class="corps"></div>`;
-    section.querySelector(".entete").onclick = () => basculerSection(groupe);
-
-    const corps = section.querySelector(".corps");
-    for (const p of items) corps.appendChild(construireFiche(p));
-    liste.appendChild(section);
+  function rendreBloc(ordre, titre, couleur) {
+    let affiche = false;
+    for (const groupe of ordre) {
+      const items = vus.filter(p => p.groupe === groupe);
+      if (!items.length) continue;
+      if (!affiche) {
+        const entete = document.createElement("div");
+        entete.className = "entete-bloc";
+        entete.style.cssText = `border-left:3px solid ${couleur};padding:6px 10px;margin:18px 0 6px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:${couleur};`;
+        entete.textContent = titre;
+        liste.appendChild(entete);
+        affiche = true;
+      }
+      const section = document.createElement("div");
+      section.className = "section" + (repliees.has(groupe) ? " repliee" : "");
+      section.dataset.groupe = groupe;
+      section.innerHTML = `
+        <div class="entete">
+          <span class="titre">${LABELS[groupe]} <span class="sous">— ${items.length}</span></span>
+          <span class="fleche">▾</span>
+        </div>
+        <div class="corps"></div>`;
+      section.querySelector(".entete").onclick = () => basculerSection(groupe);
+      const corps = section.querySelector(".corps");
+      for (const p of items) corps.appendChild(construireFiche(p));
+      liste.appendChild(section);
+    }
   }
+
+  rendreBloc(ORDRE_AUTO, "⚡ Automatisation — processus à automatiser", "#f59e0b");
+  rendreBloc(ORDRE_SITE, "🌐 Site web — présence en ligne", "#3b82f6");
 }
 
 function construireStats() {
@@ -1065,7 +1114,7 @@ async function exporterJournal() {
 
 document.getElementById("bouton-export").onclick = exporterJournal;
 
-for (const id of ["q", "zone", "etat"]) {
+for (const id of ["q", "zone", "besoin", "etat"]) {
   document.getElementById(id).addEventListener("input", afficher);
 }
 majCompteur();
@@ -1090,6 +1139,7 @@ def ecrire_html(fiches, chemin=FICHIER_HTML):
             "wa": f"https://wa.me/{principal}",
             "carte": f'https://www.google.com/maps?q={p["lat"]},{p["lon"]}',
             "prio": bool(score(p)),
+            "besoin": p.get("besoin", "site"),
             "message": p["message"],
             "demo": pathlib.Path(p["demo"]).as_uri() if p.get("demo") else "",
         })
@@ -1104,7 +1154,9 @@ def ecrire_html(fiches, chemin=FICHIER_HTML):
             .replace("__ZONES__", options)
             .replace("__DONNEES__", json.dumps(donnees, ensure_ascii=False).replace("</", "<\\/"))
             .replace("__LABELS__", json.dumps(LABELS_GROUPE, ensure_ascii=False))
-            .replace("__ORDRE__", json.dumps(ORDRE_GROUPES, ensure_ascii=False)))
+            .replace("__ORDRE__", json.dumps(ORDRE_GROUPES, ensure_ascii=False))
+            .replace("__ORDRE_AUTO__", json.dumps(ORDRE_AUTO, ensure_ascii=False))
+            .replace("__ORDRE_SITE__", json.dumps(ORDRE_SITE, ensure_ascii=False)))
 
     f, chemin_reel = ouvrir_en_ecriture(chemin, encoding="utf-8")
     with f:
