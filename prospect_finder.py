@@ -1085,8 +1085,8 @@ async function exporterJournal() {
 
   const colonnes = ["date", "nom", "zone", "categorie", "telephone", "statut", "message"];
   const echapper = v => `"${String(v).replace(/"/g, '""')}"`;
-  const contenu = "﻿" + colonnes.join(";") + "\n"
-    + lignes.map(l => colonnes.map(c => echapper(l[c])).join(";")).join("\n");
+  const contenu = "﻿" + colonnes.join(";") + "\\n"
+    + lignes.map(l => colonnes.map(c => echapper(l[c])).join(";")).join("\\n");
   const nomFichier = "journal_envois.csv";
 
   if (window.showSaveFilePicker) {
@@ -1141,7 +1141,7 @@ def ecrire_html(fiches, chemin=FICHIER_HTML):
             "prio": bool(score(p)),
             "besoin": p.get("besoin", "site"),
             "message": p["message"],
-            "demo": pathlib.Path(p["demo"]).as_uri() if p.get("demo") else "",
+            "demo": f"demos/{pathlib.Path(p['demo']).name}" if p.get("demo") else "",
         })
 
     zones = sorted({d["zone"] for d in donnees})
